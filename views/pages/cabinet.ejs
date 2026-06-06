@@ -1,0 +1,235 @@
+<%- include('../partials/head', { title: 'Личный кабинет - AMIRXWMI' }) %>
+
+  <body>
+    <%- include('../partials/header') %>
+
+      <% if (flash) { %>
+        <div class="flash <%= flash.type %>">
+          <%= flash.message %>
+        </div>
+        <% } %>
+
+          <section class="cabinet-section">
+            <div class="container">
+              <div class="cabinet-hero">
+                <div>
+                  <span class="cabinet-kicker">Личный кабинет</span>
+                  <h1 class="cabinet-title">Привет, <%= user.name %>
+                  </h1>
+                  <p class="cabinet-subtitle">Здесь собраны ваши сертификаты и записи на съемки — все отдельно и без
+                    лишнего шума.</p>
+                </div>
+
+                <div class="cabinet-hero-stats">
+                  <div class="cabinet-stat">
+                    <span class="cabinet-stat__value">
+                      <%= certificates ? certificates.length : 0 %>
+                    </span>
+                    <span class="cabinet-stat__label">сертификатов</span>
+                  </div>
+                  <div class="cabinet-stat">
+                    <span class="cabinet-stat__value">
+                      <%= bookings ? bookings.length : 0 %>
+                    </span>
+                    <span class="cabinet-stat__label">съемок</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cabinet-layout">
+                <aside class="cabinet-profile">
+                  <div class="cabinet-profile__avatar">
+                    <i class="fas fa-user"></i>
+                  </div>
+                  <div class="cabinet-profile__name">
+                    <%= user.name %>
+                  </div>
+                  <div class="cabinet-profile__email">
+                    <%= user.email %>
+                  </div>
+                  <p class="cabinet-profile__hint">Управляйте своими покупками и следите за статусом записей в одном
+                    месте.</p>
+                </aside>
+
+                <div class="cabinet-panels">
+                  <section class="cabinet-panel">
+                    <div class="cabinet-panel__header">
+                      <div>
+                        <h2 class="cabinet-panel__title"><i class="fas fa-gift"></i> Сертификаты</h2>
+                        <p class="cabinet-panel__subtitle">Подарочные сертификаты, их статус и комментарии</p>
+                      </div>
+                    </div>
+
+                    <% if (!certificates || certificates.length===0) { %>
+                      <div class="cabinet-empty-state">
+                        <i class="fas fa-ticket-alt"></i>
+                        <p>Пока нет сертификатов.</p>
+                        <a href="/certificates" class="cabinet-empty-link">Выбрать сертификат</a>
+                      </div>
+                      <% } else { %>
+                        <div class="cabinet-list">
+                          <% certificates.forEach((p)=> { %>
+                            <article class="cabinet-item">
+                              <div class="cabinet-item__top">
+                                <div>
+                                  <h3 class="cabinet-item__title">
+                                    <%= (p.Certificate && p.Certificate.title) ? p.Certificate.title : 'Сертификат' %>
+                                  </h3>
+                                  <p class="cabinet-item__price">
+                                    <%= (p.price) ? (p.price + ' ₽' ) : ((p.Certificate && p.Certificate.price) ?
+                                      (p.Certificate.price + ' ₽' ) : '' ) %>
+                                  </p>
+                                </div>
+
+                                <div class="status-badge status-<%= p.status %>">
+                                  <% if (p.status==='new' ) { %>
+                                    <i class="fas fa-hourglass-start"></i> Обработка
+                                    <% } else if (p.status==='approved' ) { %>
+                                      <i class="fas fa-check-circle"></i> Активный
+                                      <% } else if (p.status==='completed' ) { %>
+                                        <i class="fas fa-flag-checkered"></i> Использован
+                                        <% } else { %>
+                                          <i class="fas fa-times-circle"></i> Отклонен
+                                          <% } %>
+                                </div>
+                              </div>
+
+                              <div class="cabinet-item__meta">
+                                <span class="cabinet-chip">
+                                  <i class="fas fa-calendar-alt"></i>
+                                  Оформлен <%= new Date(p.createdAt).toLocaleDateString('ru-RU') %>
+                                </span>
+                                <span class="cabinet-chip">
+                                  <i class="fas fa-hourglass-half"></i>
+                                  Действует до <%= new Date(new Date(p.createdAt).getTime() + 365 * 24 * 60 * 60 *
+                                    1000).toLocaleDateString('ru-RU') %>
+                                </span>
+                                <a class="cabinet-chip" href="/certificates/<%= p.id %>/pdf">
+                                  <i class="fas fa-file-pdf"></i>
+                                  Скачать PDF
+                                </a>
+                              </div>
+
+                              <% if (p.recipientName || p.wish) { %>
+                                <div class="cabinet-item__extras">
+                                  <% if (p.recipientName) { %>
+                                    <div class="cabinet-extra">
+                                      <i class="fas fa-user"></i>
+                                      <span>Адресат: <%= p.recipientName %></span>
+                                    </div>
+                                    <% } %>
+                                      <% if (p.wish) { %>
+                                        <div class="cabinet-extra">
+                                          <i class="fas fa-comment"></i>
+                                          <span>
+                                            <%= p.wish.substring(0, 110) %>
+                                              <%=(p.wish.length> 110) ? '...' : ''%>
+                                          </span>
+                                        </div>
+                                        <% } %>
+                                </div>
+                                <% } %>
+                            </article>
+                            <% }) %>
+                        </div>
+                        <% } %>
+                  </section>
+
+                  <section class="cabinet-panel">
+                    <div class="cabinet-panel__header">
+                      <div>
+                        <h2 class="cabinet-panel__title"><i class="fas fa-camera"></i> Съемки</h2>
+                        <p class="cabinet-panel__subtitle">Ваши записи на фотосессии и их актуальный статус</p>
+                      </div>
+                    </div>
+
+                    <% if (!bookings || bookings.length===0) { %>
+                      <div class="cabinet-empty-state">
+                        <i class="fas fa-camera-retro"></i>
+                        <p>Пока нет записей на съемку.</p>
+                        <a href="/booking" class="cabinet-empty-link">Записаться на съемку</a>
+                      </div>
+                      <% } else { %>
+                        <div class="cabinet-list">
+                          <% bookings.forEach((p)=> { %>
+                            <article class="cabinet-item cabinet-item--booking">
+                              <div class="cabinet-item__top">
+                                <div>
+                                  <h3 class="cabinet-item__title">
+                                    <%= (p.Certificate && p.Certificate.title) ? p.Certificate.title : 'Съемка' %>
+                                  </h3>
+                                  <p class="cabinet-item__price">
+                                    <%= (p.price) ? (p.price + ' ₽' ) : ((p.Certificate && p.Certificate.price) ?
+                                      (p.Certificate.price + ' ₽' ) : '' ) %>
+                                  </p>
+                                </div>
+
+                                <div class="status-badge status-<%= p.status %>">
+                                  <% if (p.status==='new' ) { %>
+                                    <i class="fas fa-hourglass-start"></i> На рассмотрении
+                                    <% } else if (p.status==='approved' ) { %>
+                                      <i class="fas fa-check-circle"></i> Подтверждена
+                                      <% } else if (p.status==='completed' ) { %>
+                                        <i class="fas fa-flag-checkered"></i> Завершена
+                                        <% } else { %>
+                                          <i class="fas fa-times-circle"></i> Отклонена
+                                          <% } %>
+                                </div>
+                              </div>
+
+                              <div class="cabinet-item__meta">
+                                <span class="cabinet-chip">
+                                  <i class="fas fa-calendar"></i>
+                                  <%= new Date(p.createdAt).toLocaleString('ru-RU') %>
+                                </span>
+
+                                <% if (p.bookingDate) { %>
+                                  <span class="cabinet-chip">
+                                    <i class="fas fa-calendar-day"></i>
+                                    <%= new Date(p.bookingDate).toLocaleDateString('ru-RU', { day:'numeric',
+                                      month:'long', year:'numeric' }) %>
+                                  </span>
+                                  <% } %>
+
+                                    <% if (p.bookingTime) { %>
+                                      <span class="cabinet-chip">
+                                        <i class="fas fa-clock"></i>
+                                        <%= p.bookingTime %>
+                                      </span>
+                                      <% } %>
+                              </div>
+
+                              <div class="cabinet-item__extras">
+                                <% if (p.clientName) { %>
+                                  <div class="cabinet-extra">
+                                    <i class="fas fa-user"></i>
+                                    <span>
+                                      <%= p.clientName %>
+                                    </span>
+                                  </div>
+                                  <% } %>
+                                    <% if (p.phone) { %>
+                                      <div class="cabinet-extra">
+                                        <i class="fas fa-phone"></i>
+                                        <span>
+                                          <%= p.phone %>
+                                        </span>
+                                      </div>
+                                      <% } %>
+                              </div>
+                            </article>
+                            <% }) %>
+                        </div>
+                        <% } %>
+                  </section>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <%- include('../partials/footer') %>
+            <%- include('../partials/chatbot') %>
+              <script src="/js/script.js"></script>
+  </body>
+
+  </html>

@@ -1,0 +1,40 @@
+<header class="header">
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="/" class="logo-link">
+          <h2>AMIRXWMI</h2>
+        </a>
+      </div>
+
+      <ul class="nav-menu">
+        <li><a href="/contacts" class="nav-link <%= path === '/contacts' ? 'active' : '' %>">Контакты</a></li>
+        <li><a href="/certificates" class="nav-link <%= path === '/certificates' ? 'active' : '' %>">Сертификаты</a>
+        </li>
+        <li><a href="/reviews" class="nav-link <%= path === '/reviews' ? 'active' : '' %>">Отзывы</a></li>
+
+        <% if (user) { %>
+          <li><a href="/booking" class="nav-link <%= path === '/booking' ? 'active' : '' %>">Запись на съемку</a></li>
+          <li><a href="/cabinet" class="nav-link <%= path === '/cabinet' ? 'active' : '' %>">Личный кабинет</a></li>
+          <% if (user.isAdmin) { %>
+            <li><a href="/admin" class="nav-link <%= path === '/admin' ? 'active' : '' %>">Админ</a></li>
+            <% } %>
+              <li>
+                <form action="/logout" method="POST" style="display:inline;">
+                  <button type="submit" class="nav-link"
+                    style="background:transparent;border:none;cursor:pointer;padding:0;">
+                    Выйти
+                  </button>
+                </form>
+              </li>
+              <% } else { %>
+                <li><a href="/auth" class="nav-link <%= path === '/auth' ? 'active' : '' %>">Войти</a></li>
+                <% } %>
+      </ul>
+
+      <div class="hamburger">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+</header>

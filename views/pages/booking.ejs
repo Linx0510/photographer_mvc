@@ -1,0 +1,398 @@
+<%- include('../partials/head', { title: 'Запись на съемку - AMIRXWMI' }) %>
+
+    <body>
+        <%- include('../partials/header') %>
+
+            <% if (flash) { %>
+                <div class="flash <%= flash.type %>">
+                    <%= flash.message %>
+                </div>
+                <% } %>
+
+                    <section class="booking-section">
+                        <div class="container">
+                            <h1 class="booking-title">Запись на съемку</h1>
+                            <p class="booking-subtitle">Выберите тариф, дату и время удобные для вас</p>
+
+                            <form action="/booking" method="POST" class="booking-form">
+
+                                <div class="booking-step">
+                                    <h3 class="step-title">1. Выберите тариф</h3>
+                                    <div class="certificates-grid">
+                                        <% certs.forEach(cert=> { %>
+                                            <label class="cert-option">
+                                                <input type="radio" name="certificateId" value="<%= cert.id %>"
+                                                    required>
+                                                <div class="cert-card <%= cert.isPopular ? 'popular' : '' %>">
+                                                    <% if (cert.isPopular) { %>
+                                                        <div class="popular-badge">Популярный</div>
+                                                        <% } %>
+                                                            <h4>
+                                                                <%= cert.title %>
+                                                            </h4>
+                                                            <div class="price">
+                                                                <%= cert.price %> ₽
+                                                            </div>
+                                                            <ul class="perks">
+                                                                <% if (cert.perks) { const perksList=typeof
+                                                                    cert.perks==='string' ? JSON.parse(cert.perks) :
+                                                                    cert.perks; perksList.forEach(perk=> { %>
+                                                                    <li><i class="fas fa-check"></i>
+                                                                        <%= perk %>
+                                                                    </li>
+                                                                    <% }) } %>
+                                                            </ul>
+                                                </div>
+                                            </label>
+                                            <% }) %>
+                                    </div>
+                                </div>
+
+                                <!-- Выбор даты и времени -->
+                                <div class="booking-step">
+                                    <h3 class="step-title">2. Выберите дату и время</h3>
+                                    <div class="date-time-grid">
+                                        <% const slotsByDate={}; slots.forEach(slot=> {
+                                            if (!slotsByDate[slot.date]) slotsByDate[slot.date] = [];
+                                            slotsByDate[slot.date].push(slot);
+                                            });
+                                            Object.keys(slotsByDate).sort().forEach(date => {
+                                            %>
+                                            <div class="date-group">
+                                                <h4 class="date-header">
+                                                    <%= new Date(date + 'T00:00:00' ).toLocaleDateString('ru-RU',
+                                                        {weekday:'short', day:'numeric', month:'long'}) %>
+                                                </h4>
+                                                <div class="time-options">
+                                                    <% slotsByDate[date].forEach(slot=> { %>
+                                                        <label class="time-option">
+                                                            <input type="radio" name="slot"
+                                                                value="<%= slot.date %>_<%= slot.time %>" required>
+                                                            <div class="time-slot">
+                                                                <span class="time">
+                                                                    <%= slot.time %>
+                                                                </span>
+                                                                <span class="duration">
+                                                                    <%= slot.duration %> ч
+                                                                </span>
+                                                            </div>
+                                                        </label>
+                                                        <% }) %>
+                                                </div>
+                                            </div>
+                                            <% }) %>
+                                    </div>
+                                    <input type="hidden" id="bookingDate" name="bookingDate">
+                                    <input type="hidden" id="bookingTime" name="bookingTime">
+                                </div>
+
+                                <!-- Контактные данные -->
+                                <div class="booking-step">
+                                    <h3 class="step-title">3. Ваши данные</h3>
+                                    <div class="form-group">
+                                        <label for="clientName">Ваше имя *</label>
+                                        <input type="text" id="clientName" name="clientName" placeholder="Иван Иванов"
+                                            required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="phone">Номер телефона *</label>
+                                        <input type="tel" id="phone" name="phone" placeholder="+7 (999) 999-99-99"
+                                            required>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="submit-btn">
+                                    <i class="fas fa-check"></i>
+                                    Записаться на съемку
+                                </button>
+                            </form>
+                        </div>
+                    </section>
+
+                    <style>
+                        .booking-section {
+                            max-width: 1000px;
+                            margin: 60px auto;
+                            padding: 0 24px;
+                            padding-top: 40px;
+                        }
+
+                        .booking-title {
+                            font-size: 2.5rem;
+                            font-weight: 700;
+                            margin-bottom: 12px;
+                            background: linear-gradient(135deg, #ff4d94, #8b5cf6);
+                            background-clip: text;
+                            -webkit-background-clip: text;
+                            -webkit-text-fill-color: transparent;
+                        }
+
+                        .booking-subtitle {
+                            font-size: 1.1rem;
+                            color: #888;
+                            margin-bottom: 40px;
+                        }
+
+                        .booking-form {
+                            background: white;
+                            border-radius: 16px;
+                            padding: 40px;
+                            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+                        }
+
+                        .booking-step {
+                            margin-bottom: 36px;
+                        }
+
+                        .step-title {
+                            font-size: 1.3rem;
+                            font-weight: 600;
+                            margin-bottom: 20px;
+                            color: #1e293b;
+                            border-bottom: 2px solid #f0f0f0;
+                            padding-bottom: 12px;
+                        }
+
+                        .certificates-grid {
+                            display: grid;
+                            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                            gap: 20px;
+                        }
+
+                        .cert-option {
+                            cursor: pointer;
+                        }
+
+                        .cert-option input[type="radio"] {
+                            display: none;
+                        }
+
+                        .cert-card {
+                            background: linear-gradient(135deg, #f8fafc 0%, #f0f4f8 100%);
+                            border: 2px solid #e2e8f0;
+                            border-radius: 12px;
+                            padding: 24px;
+                            transition: all 0.3s ease;
+                            position: relative;
+                        }
+
+                        .cert-option input[type="radio"]:checked+.cert-card {
+                            border-color: #ff4d94;
+                            background: linear-gradient(135deg, #fff5f8 0%, #ffe8f0 100%);
+                            box-shadow: 0 8px 24px rgba(255, 77, 148, 0.2);
+                        }
+
+
+
+                        .popular-badge {
+                            position: absolute;
+                            top: 12px;
+                            right: 12px;
+                            background: linear-gradient(135deg, #8b5cf6, #ff4d94);
+                            color: white;
+                            padding: 6px 12px;
+                            border-radius: 20px;
+                            font-size: 0.75rem;
+                            font-weight: 700;
+                        }
+
+                        .cert-card h4 {
+                            font-size: 1.1rem;
+                            font-weight: 600;
+                            margin-bottom: 8px;
+                            color: #1e293b;
+                        }
+
+                        .price {
+                            font-size: 1.5rem;
+                            font-weight: 700;
+                            color: #ff4d94;
+                            margin-bottom: 16px;
+                        }
+
+                        .perks {
+                            list-style: none;
+                            font-size: 0.9rem;
+                            color: #666;
+                        }
+
+                        .perks li {
+                            margin-bottom: 8px;
+                            display: flex;
+                            align-items: center;
+                            gap: 8px;
+                        }
+
+                        .perks i {
+                            color: #22c55e;
+                            font-size: 0.8rem;
+                        }
+
+                        .date-time-grid {
+                            display: grid;
+                            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                            gap: 20px;
+                        }
+
+                        .date-group {
+                            background: #f8fafc;
+                            border-radius: 12px;
+                            padding: 16px;
+                            border: 1px solid #e2e8f0;
+                        }
+
+                        .date-header {
+                            font-size: 0.95rem;
+                            font-weight: 600;
+                            color: #64748b;
+                            margin-bottom: 12px;
+                            text-transform: capitalize;
+                        }
+
+                        .time-options {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 8px;
+                        }
+
+                        .time-option {
+                            cursor: pointer;
+                        }
+
+                        .time-option input[type="radio"] {
+                            display: none;
+                        }
+
+                        .time-slot {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            padding: 10px 12px;
+                            background: white;
+                            border: 1.5px solid #e2e8f0;
+                            border-radius: 8px;
+                            transition: all 0.2s ease;
+                            font-size: 0.9rem;
+                        }
+
+                        .time-option input[type="radio"]:checked+.time-slot {
+                            border-color: #ff4d94;
+                            background: #fff5f8;
+                            box-shadow: 0 4px 12px rgba(255, 77, 148, 0.15);
+                        }
+
+                        .time {
+                            font-weight: 600;
+                            color: #1e293b;
+                        }
+
+                        .duration {
+                            font-size: 0.8rem;
+                            color: #888;
+                            background: #f0f0f0;
+                            padding: 2px 8px;
+                            border-radius: 4px;
+                        }
+
+                        .form-group {
+                            margin-bottom: 16px;
+                        }
+
+                        .form-group label {
+                            display: block;
+                            font-weight: 500;
+                            margin-bottom: 8px;
+                            color: #1e293b;
+                            font-size: 0.95rem;
+                        }
+
+                        .form-group input {
+                            width: 100%;
+                            padding: 12px 14px;
+                            border: 1.5px solid #e2e8f0;
+                            border-radius: 8px;
+                            font-size: 0.95rem;
+                            transition: all 0.2s ease;
+                            font-family: inherit;
+                        }
+
+                        .form-group input:focus {
+                            outline: none;
+                            border-color: #ff4d94;
+                            box-shadow: 0 0 0 3px rgba(255, 77, 148, 0.1);
+                        }
+
+                        .submit-btn {
+                            width: 100%;
+                            padding: 14px 28px;
+                            background: linear-gradient(135deg, #ff4d94, #8b5cf6);
+                            color: white;
+                            border: none;
+                            border-radius: 8px;
+                            font-size: 1rem;
+                            font-weight: 600;
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            gap: 8px;
+                        }
+
+                        .submit-btn:hover {
+                            transform: translateY(-2px);
+                            box-shadow: 0 12px 32px rgba(255, 77, 148, 0.3);
+                        }
+
+                        .submit-btn:active {
+                            transform: translateY(0);
+                        }
+
+                        @media (max-width: 768px) {
+                            .booking-form {
+                                padding: 24px;
+                            }
+
+                            .booking-title {
+                                font-size: 1.8rem;
+                            }
+
+                            .certificates-grid {
+                                grid-template-columns: 1fr;
+                            }
+
+                            .date-time-grid {
+                                grid-template-columns: 1fr;
+                            }
+                        }
+                    </style>
+
+                    <%- include('../partials/footer') %>
+
+                        <script>
+                            // Обработка выбора слота (дата + время)
+                            const slotInputs = document.querySelectorAll('input[name="slot"]');
+                            slotInputs.forEach(input => {
+                                input.addEventListener('change', (e) => {
+                                    const [date, time] = e.target.value.split('_');
+                                    document.getElementById('bookingDate').value = date;
+                                    document.getElementById('bookingTime').value = time;
+                                });
+                            });
+
+                            // Валидация формы
+                            document.querySelector('.booking-form').addEventListener('submit', (e) => {
+                                const slot = document.querySelector('input[name="slot"]:checked');
+                                const clientName = document.getElementById('clientName').value;
+                                const phone = document.getElementById('phone').value;
+
+                                if (!slot) {
+                                    e.preventDefault();
+                                    alert('Пожалуйста, выберите дату и время');
+                                    return false;
+                                }
+                            });
+                        </script>
+    </body>
+
+    </html>

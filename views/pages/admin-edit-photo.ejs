@@ -1,0 +1,68 @@
+<%- include('../partials/head', { title: 'Редактировать фото' }) %>
+<body>
+<%- include('../partials/header') %>
+
+<style>
+  .edit-wrap { max-width: 600px; margin: 40px auto; padding: 0 20px; }
+  .edit-card { background: #fff; border-radius: 16px; padding: 32px; box-shadow: 0 2px 16px rgba(0,0,0,.07); }
+  .edit-card h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 24px; }
+  .edit-card label { font-size: .85rem; color: #666; margin-bottom: 4px; display: block; }
+  .edit-card input, .edit-card select {
+    width: 100%; padding: 10px 14px; border: 1.5px solid #e0e0e0; border-radius: 10px;
+    font-size: .95rem; background: #fafafa; box-sizing: border-box; margin-bottom: 16px;
+  }
+  .edit-card input:focus, .edit-card select:focus { outline: none; border-color: #b08d67; }
+  .current-img { width: 100%; max-height: 220px; object-fit: cover; border-radius: 12px; margin-bottom: 16px; }
+  .or-divider { text-align: center; color: #aaa; font-size: .85rem; margin: 6px 0 14px; }
+  .btn { padding: 10px 22px; border-radius: 10px; border: none; cursor: pointer; font-size: .95rem; font-weight: 600; }
+  .btn-primary { background: #b08d67; color: #fff; }
+  .btn-secondary { background: #eee; color: #333; text-decoration: none; margin-left: 10px; }
+  .flash { padding: 12px 16px; border-radius: 10px; margin-bottom: 20px; }
+  .flash.error { background: #f8d7da; color: #721c24; }
+</style>
+
+<div class="edit-wrap">
+  <div class="edit-card">
+    <h1>Редактировать фото</h1>
+
+    <% if (flash) { %>
+      <div class="flash <%= flash.type %>"><%= flash.message %></div>
+    <% } %>
+
+    <img src="<%= photo.imagePath %>" alt="" class="current-img" onerror="this.style.display='none'">
+
+    <form action="/admin/photos/<%= photo.id %>/edit" method="POST" enctype="multipart/form-data">
+
+      <label>Категория *</label>
+      <select name="category" required>
+        <option value="portrait"  <%= photo.category==='portrait' ?'selected':'' %>>Портрет</option>
+        <option value="love"      <%= photo.category==='love'     ?'selected':'' %>>Love Story</option>
+        <option value="family"    <%= photo.category==='family'   ?'selected':'' %>>Семья</option>
+        <option value="event"     <%= photo.category==='event'    ?'selected':'' %>>Событие</option>
+      </select>
+
+      <label>Название *</label>
+      <input type="text" name="title" value="<%= photo.title %>" required>
+
+      <label>Подпись</label>
+      <input type="text" name="subtitle" value="<%= photo.subtitle || '' %>">
+
+      <label>Порядок сортировки</label>
+      <input type="number" name="sort" value="<%= photo.sort %>" min="0">
+
+      <label>Заменить файл (загрузить с компьютера)</label>
+      <input type="file" name="image" accept="image/*">
+      <div class="or-divider">— или задать путь вручную —</div>
+      <label>Путь к изображению (оставьте пустым, чтобы не менять)</label>
+      <input type="text" name="imageUrl" placeholder="/images/new_photo.jpg">
+
+      <button type="submit" class="btn btn-primary">Сохранить</button>
+      <a href="/admin" class="btn btn-secondary">Отмена</a>
+    </form>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
+<script src="/js/script.js"></script>
+</body>
+</html>

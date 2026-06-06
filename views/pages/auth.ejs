@@ -1,0 +1,78 @@
+<%- include('../partials/head', { title: 'Кабинет - AMIRXWMI' }) %>
+
+  <body class="auth-page">
+    <%- include('../partials/header') %>
+
+      <% if (flash) { %>
+        <div style="max-width:520px;margin:20px auto 0;padding:12px 16px;border-radius:12px;"
+          class="flash <%= flash.type %>">
+          <%= flash.message %>
+        </div>
+        <% } %>
+
+          <div class="auth-container">
+            <div class="auth-box">
+              <div class="tabs">
+                <button class="tab active" type="button" data-tab="login">Войти</button>
+                <button class="tab" type="button" data-tab="register">Регистрация</button>
+              </div>
+
+              <form id="loginForm" action="/auth" method="POST" class="auth-panel">
+                <input type="hidden" name="mode" value="login" />
+
+                <input type="email" name="email" placeholder="Email" autocomplete="email" required>
+                <input type="password" name="password" placeholder="Пароль" autocomplete="current-password" required>
+
+                <button type="submit" class="big-btn auth-submit">
+                  <span class="auth-btn-text">Войти</span>
+                </button>
+              </form>
+
+              <form id="registerForm" action="/auth" method="POST" class="auth-panel" style="display:none;">
+                <input type="hidden" name="mode" value="register" />
+
+                <input type="text" name="name" placeholder="Имя" autocomplete="name" required>
+                <input type="email" name="email" placeholder="Email" autocomplete="email" required>
+                <input type="password" name="password" placeholder="Пароль" autocomplete="new-password" required>
+
+                <button type="submit" class="big-btn auth-submit">
+                  <span class="auth-btn-text">Зарегистрироваться</span>
+                </button>
+              </form>
+
+              <% if (user) { %>
+                <div style="margin-top:18px;text-align:center;opacity:.85;">
+                  Вы вошли как <strong>
+                    <%= user.name %>
+                  </strong> (<%= user.email %>)
+                </div>
+                <% } %>
+            </div>
+          </div>
+
+          <script>
+            const tabs = Array.from(document.querySelectorAll('.tab'));
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+
+            function setActiveTab(tab) {
+              const isRegister = tab === 'register';
+
+              loginForm.style.display = isRegister ? 'none' : 'block';
+              registerForm.style.display = isRegister ? 'block' : 'none';
+
+              tabs.forEach((button) => {
+                button.classList.toggle('active', button.dataset.tab === tab);
+              });
+            }
+
+            tabs.forEach((button) => {
+              button.addEventListener('click', () => setActiveTab(button.dataset.tab));
+            });
+          </script>
+
+          <%- include('../partials/chatbot') %>
+            <script src="/js/script.js"></script>
+  </body>
+
+  </html>

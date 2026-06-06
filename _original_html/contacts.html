@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контакты - amirxwmi</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Шапка -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                 
+                    <h2>AMIRXWMI</h2>
+                </div>
+                <ul class="nav-menu"> 
+                    <li><a href="index.html" class="nav-link active">Главная</a></li>
+                    <li><a href="contacts.html" class="nav-link">Контакты</a></li>
+                    <li><a href="certificates.html" class="nav-link">Сертификаты</a></li>
+                    <li><a href="auth.html" class="nav-link active">Регистрация</a></li>
+                </ul>
+         
+                <div class="hamburger">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 📞 ПРОСТЫЕ КОНТАКТЫ -->
+    <section class="contacts-hero">
+        <div class="container">
+            <h1>Связаться со мной</h1>
+            <p>Напишите или позвоните - отвечу в течение часа</p>
+        </div>
+    </section>
+
+    <!-- 📱 КОНТАКТНАЯ ИНФО -->
+    <section class="contacts-info">
+        <div class="container">
+            <div class="contacts-grid">
+                <!-- Телефон -->
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div>
+                        <h3>Телефон</h3>
+                        <a href="tel:+79991234567">+7 (999) 123-45-67</a>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div>
+                        <h3>Email</h3>
+                        <a href="mailto:hello@amirxwmi.ru">hello@amirxwmi.ru</a>
+                    </div>
+                </div>
+
+                <!-- Telegram -->
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fab fa-telegram"></i>
+                    </div>
+                    <div>
+                        <h3>Telegram</h3>
+                        <a href="https://t.me/amirxwmi">@amirxwmi</a>
+                    </div>
+                </div>
+
+                <!-- Instagram -->
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fab fa-instagram"></i>
+                    </div>
+                    <div>
+                        <h3>Instagram</h3>
+                        <a href="https://instagram.com/amirxwmi">@amirxwmi</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✍️ ПРОСТАЯ ФОРМА -->
+    <section class="contact-form-section">
+        <div class="container">
+            <h2>Написать сообщение</h2>
+            <form class="simple-form">
+                <input type="text" placeholder="Ваше имя" required>
+                <input type="tel" placeholder="Телефон / Telegram">
+                <input type="email" placeholder="Email">
+                <textarea placeholder="Сообщение" rows="5" required></textarea>
+                <button type="submit" class="send-btn">
+                    Отправить
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- 🗺️ АДРЕС -->
+    <section class="contact-location">
+        <div class="container">
+            <h2>Где снимаю</h2>
+            <div class="location-info">
+                <div>
+                    <i class="fas fa-map-marker-alt"></i>
+                    <p>Оренбург и Оренбургская область<br>
+                    Выезд по России</p>
+                </div>
+                <div class="work-times">
+                    <h3>Время работы</h3>
+                    <p>Ежедневно • 9:00 - 21:00</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">...</footer>
+
+    <script>
+        document.querySelector('.simple-form').onsubmit = function(e) {
+            e.preventDefault();
+            alert('✅ Сообщение отправлено! Отвечу в течение часа.');
+            this.reset();
+        }
+    </script>
+</body>
+</html>

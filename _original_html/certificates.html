@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подарочные сертификаты - amirxwmi</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Шапка -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                 
+                    <h2>AMIRXWMI</h2>
+                </div>
+                <ul class="nav-menu"> 
+                    <li><a href="index.html" class="nav-link active">Главная</a></li>
+                    <li><a href="contacts.html" class="nav-link">Контакты</a></li>
+                    <li><a href="certificates.html" class="nav-link">Сертификаты</a></li>
+                    <li><a href="auth.html" class="nav-link active">Регистрация</a></li>
+                </ul>
+            
+                <div class="hamburger">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 🎁 ПРОСТОЙ HERO -->
+    <section class="cert-simple-hero">
+        <div class="container">
+            <h1>Подарочные сертификаты</h1>
+            <p>Выберите сертификат и оплатите за 10 секунд</p>
+        </div>
+    </section>
+
+    <!-- 💳 3 КАРТОЧКИ -->
+    <section class="cert-cards-section">
+        <div class="container">
+            <div class="cert-cards">
+                <!-- КАРТА 1 -->
+                <div class="cert-card">
+                    <h3>1 час съемки</h3>
+                    <div class="price-big">2 500 ₽</div>
+                    <ul>
+                        <li>1 час работы</li>
+                        <li>30 фото</li>
+                        <li>Love Story / Портрет</li>
+                    </ul>
+                    <button class="pay-btn" onclick="payCard(2500, '1 час съемки')">
+                        Оплатить
+                    </button>
+                </div>
+
+                <!-- КАРТА 2 -->
+                <div class="cert-card popular">
+                    <div class="popular-label">ПОПУЛЯРНЫЙ</div>
+                    <h3>2 часа съемки</h3>
+                    <div class="price-big">5 000 ₽</div>
+                    <ul>
+                        <li>2 часа работы</li>
+                        <li>70 фото</li>
+                        <li>Любой формат</li>
+                        <li>Видео 30 сек</li>
+                    </ul>
+                    <button class="pay-btn" onclick="payCard(5000, '2 часа съемки')">
+                        Оплатить
+                    </button>
+                </div>
+
+                <!-- КАРТА 3 -->
+                <div class="cert-card">
+                    <h3>4 часа VIP</h3>
+                    <div class="price-big">10 000 ₽</div>
+                    <ul>
+                        <li>4 часа работы</li>
+                        <li>150+ фото</li>
+                        <li>Видео 2 мин</li>
+                        <li>Альбом 20 фото</li>
+                    </ul>
+                    <button class="pay-btn" onclick="payCard(10000, '4 часа VIP')">
+                        Оплатить
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ❓ ВОПРОСЫ (оставил) -->
+    <section class="faq-simple">
+        <div class="container">
+            <h2>Вопросы?</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-q">Срок действия?</div>
+                    <div class="faq-a">12 месяцев</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Для кого?</div>
+                    <div class="faq-a">1-2 человека</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Формат?</div>
+                    <div class="faq-a">PDF на email</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">...</footer>
+
+    <!-- МОДАЛКА ОПЛАТЫ -->
+    <div id="payModal" class="pay-modal">
+        <div class="pay-content">
+            <span class="close-pay" onclick="closePay()">&times;</span>
+            <div id="payFormContent"></div>
+        </div>
+    </div>
+
+    <script>
+        function payCard(price, type) {
+            document.getElementById('payModal').style.display = 'flex';
+            document.getElementById('payFormContent').innerHTML = `
+                <h2>${type}</h2>
+                <div class="final-price">${price} ₽</div>
+                
+                <form id="payForm">
+                    <input type="text" placeholder="Ваше имя" required>
+                    <input type="email" placeholder="Email" required>
+                    <input type="text" placeholder="Имя получателя подарка">
+                    <textarea placeholder="Пожелание (не обязательно)"></textarea>
+                    
+                    <div class="pay-info">
+                        <i class="fas fa-lock"></i>
+                        <span>Безопасная оплата картой</span>
+                    </div>
+                    
+                    <button type="submit" class="pay-now-btn">
+                        ОПЛАТИТЬ ${price} ₽
+                    </button>
+                </form>
+            `;
+            
+            document.getElementById('payForm').onsubmit = function(e) {
+                e.preventDefault();
+                alert('✅ Сертификат куплен! PDF отправлен на ваш email.');
+                closePay();
+            };
+        }
+        
+        function closePay() {
+            document.getElementById('payModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

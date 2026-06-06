@@ -1,0 +1,82 @@
+<%- include('../partials/head', { title: 'Отзывы - AMIRXWMI' }) %>
+
+<body>
+  <%- include('../partials/header') %>
+
+  <% if (flash) { %>
+    <div style="max-width:1100px;margin:20px auto 0;padding:12px 16px;border-radius:12px;"
+      class="flash <%= flash.type %>">
+      <%= flash.message %>
+    </div>
+  <% } %>
+
+  <section class="reviews-hero">
+    <div class="container">
+      <h1>Отзывы клиентов</h1>
+      <p>Мнения людей, которым я доверяю больше всего</p>
+    </div>
+  </section>
+
+  <% if (reviews.length > 0) { %>
+  <section class="reviews-list-section">
+    <div class="container">
+      <h2 class="section-title">Что говорят клиенты</h2>
+      <div class="reviews-grid">
+        <% reviews.forEach(r => { %>
+        <div class="review-card">
+          <div class="review-stars">
+            <% for (let i = 1; i <= 5; i++) { %>
+              <i class="fas fa-star <%= i <= r.rating ? 'star-filled' : 'star-empty' %>"></i>
+            <% } %>
+          </div>
+          <p class="review-text">"<%= r.text %>"</p>
+          <div class="review-author">
+            <div class="review-avatar">
+              <%= r.name.charAt(0).toUpperCase() %>
+            </div>
+            <span class="review-name"><%= r.name %></span>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+  <% } else { %>
+  <section class="reviews-empty">
+    <div class="container">
+      <div class="empty-state">
+        <i class="fas fa-comments"></i>
+        <p>Пока отзывов нет — будьте первым!</p>
+      </div>
+    </div>
+  </section>
+  <% } %>
+
+  <section class="review-form-section">
+    <div class="container">
+      <h2>Оставить отзыв</h2>
+      <form class="simple-form review-form" action="/reviews" method="POST">
+        <input type="text" name="name" placeholder="Ваше имя" required maxlength="100">
+
+        <div class="rating-input">
+          <label>Оценка:</label>
+          <div class="star-rating">
+            <% for (let i = 5; i >= 1; i--) { %>
+              <input type="radio" id="star<%= i %>" name="rating" value="<%= i %>" <%= i === 5 ? 'checked' : '' %>>
+              <label for="star<%= i %>"><i class="fas fa-star"></i></label>
+            <% } %>
+          </div>
+        </div>
+
+        <textarea name="text" placeholder="Расскажите о вашем опыте работы со мной..." rows="5" required maxlength="1000"></textarea>
+        <button type="submit" class="send-btn">Отправить отзыв</button>
+      </form>
+    </div>
+  </section>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/chatbot') %>
+  <script src="/js/script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кабинет - amirxwmi</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="auth-page">
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                 
+                    <h2>AMIRXWMI</h2>
+                </div>
+                <ul class="nav-menu"> 
+                    <li><a href="index.html" class="nav-link active">Главная</a></li>
+                    <li><a href="contacts.html" class="nav-link">Контакты</a></li>
+                    <li><a href="certificates.html" class="nav-link">Сертификаты</a></li>
+                    <li><a href="auth.html" class="nav-link active">Регистрация</a></li>
+                </ul>
+
+                <div class="hamburger">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="auth-container">
+        <div class="auth-box">
+            <!-- ТАБЫ -->
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('login')">Войти</button>
+                <button class="tab" onclick="switchTab('register')">Регистрация</button>
+            </div>
+
+            <!-- ФОРМА -->
+            <form id="authForm">
+                <!-- ВХОД -->
+                <div id="loginForm" class="form-group">
+                    <input type="email" id="loginEmail" placeholder="✉️ Email" required>
+                    <input type="password" id="loginPassword" placeholder="🔒 Пароль" required>
+                    <button type="submit" class="big-btn">Войти</button>
+                </div>
+
+                <!-- РЕГИСТРАЦИЯ -->
+                <div id="registerForm" class="form-group" style="display:none;">
+                    <input type="text" id="regName" placeholder="👤 Имя" required>
+                    <input type="email" id="regEmail" placeholder="✉️ Email" required>
+                    <input type="password" id="regPassword" placeholder="🔒 Пароль" required>
+                    <button type="submit" class="big-btn">Зарегистрироваться</button>
+                </div>
+            </form>
+
+            <!-- СООБЩЕНИЕ -->
+            <div id="successMsg" class="success-message">
+                <div class="checkmark">✓</div>
+                <div id="msgText">Загрузка...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let activeTab = 'login';
+
+        // Переключение табов
+        function switchTab(tab) {
+            activeTab = tab;
+            
+            // Скрыть все формы
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'none';
+            
+            // Показать нужную
+            document.getElementById(tab + 'Form').style.display = 'block';
+            
+            // Активный таб
+            document.querySelector('.tab.active').classList.remove('active');
+            event.target.classList.add('active');
+        }
+
+        // Обработка формы
+        document.getElementById('authForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (activeTab === 'register') {
+                registerUser();
+            } else {
+                loginUser();
+            }
+        });
+
+        // ✅ РЕГИСТРАЦИЯ
+        function registerUser() {
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+
+            // Проверка
+            if (password.length < 3) {
+                alert('Пароль слишком короткий!');
+                return;
+            }
+
+            // СОХРАНЕНИЕ
+            localStorage.setItem('user_' + email, name);
+            localStorage.setItem('loggedUser', email);
+            localStorage.setItem('isAuth', 'true');
+            
+            // ✅ ПРАВИЛЬНОЕ СООБЩЕНИЕ
+            showSuccess('Вы успешно зарегистрированы!');
+        }
+
+        // 🔑 ВХОД
+        function loginUser() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const savedName = localStorage.getItem('user_' + email);
+
+            if (savedName && password.length > 0) {
+                localStorage.setItem('loggedUser', email);
+                localStorage.setItem('isAuth', 'true');
+                
+                // ✅ ПРАВИЛЬНОЕ СООБЩЕНИЕ ДЛЯ ВХОДА
+                showSuccess('Вы успешно вошли!');
+            } else {
+                alert('Пользователь не найден!');
+            }
+        }
+
+        // Показать сообщение УСПЕХА
+        function showSuccess(text) {
+            const msg = document.getElementById('successMsg');
+            document.getElementById('msgText').textContent = text;
+            msg.style.display = 'block';
+            
+            // Переход через 2 секунды
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

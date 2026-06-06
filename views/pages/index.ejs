@@ -1,0 +1,159 @@
+<%- include('../partials/head', { title: 'AMIRXWMI Photography - Запечатлю вашу историю' }) %>
+
+  <body>
+    <%- include('../partials/header') %>
+
+      <% if (flash) { %>
+        <div class="flash <%= flash.type %>">
+          <%= flash.message %>
+        </div>
+        <% } %>
+
+          <section class="hero-story">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+              <div class="hero-text">
+                <h1 class="hero-title">Запечатлю вашу историю</h1>
+                <p class="hero-subtitle">Каждый момент - это искусство. С AMIRXWMI Photography ваши воспоминания обретут
+                  вечность</p>
+                <div class="hero-buttons">
+                  <a href="/booking" class="cta-button primary">
+                    <i class="fas fa-calendar-plus"></i>
+                    Записаться на съемку
+                  </a>
+                  <a href="#portfolio" class="cta-button secondary">
+                    <i class="fas fa-images"></i>
+                    Посмотреть работы
+                  </a>
+                </div>
+              </div>
+              <div class="hero-stats">
+                <div class="stat-item">
+                  <div class="stat-number" data-target="500">0</div>
+                  <div class="stat-label">Счастливых клиентов</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-number" data-target="2500">0</div>
+                  <div class="stat-label">Кадров снято</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-number" data-target="50">0</div>
+                  <div class="stat-label">Наград</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="about-me">
+            <div class="container">
+              <div class="about-content">
+                <div class="about-image">
+                  <img src="/images/11111222%20(1).jpg" alt="Ваше фото" class="about-photo">
+                  <div class="photo-overlay">
+                    <div class="social-links">
+                      <a href="https://t.me/mirkswmi" class="social-link"><i class="fab fa-instagram"></i></a>
+                      <a href="#" class="social-link"><i class="fab fa-vk"></i></a>
+                      <a href="#" class="social-link"><i class="fab fa-telegram"></i></a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="about-text">
+                  <h2 class="section-title about-title">Обо мне</h2>
+                  <div class="about-badge"><span>Фотограф с душой</span></div>
+
+                  <p class="about-lead">
+                    Привет! Меня зовут <strong>Амира</strong>. Я фотограф, которая видит красоту в каждом мгновении.
+                  </p>
+
+                  <div class="about-features">
+                    <div class="feature-item">
+                      <div class="feature-icon"><i class="fas fa-award"></i></div>
+                      <div>
+                        <h4>5+ лет опыта</h4>
+                        <p>Профессиональные съемки по всей России</p>
+                      </div>
+                    </div>
+                    <div class="feature-item">
+                      <div class="feature-icon"><i class="fas fa-camera"></i></div>
+                      <div>
+                        <h4>Профессиональное оборудование</h4>
+                        <p>Canon EOS R5 + дрон DJI Mavic 3</p>
+                      </div>
+                    </div>
+                    <div class="feature-item">
+                      <div class="feature-icon"><i class="fas fa-users"></i></div>
+                      <div>
+                        <h4>Индивидуальный подход</h4>
+                        <p>Каждая съемка - уникальная история</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="about-buttons">
+                    <a href="/contacts" class="cta-button primary">
+                      <i class="fas fa-comment"></i>
+                      Связаться со мной
+                    </a>
+                    <a href="/certificates" class="cta-button secondary">
+                      <i class="fas fa-certificate"></i>
+                      Сертификаты
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="portfolio" id="portfolio">
+            <div class="container">
+              <div class="section-header">
+                <h2 class="section-title">Мои работы</h2>
+                <p class="section-subtitle">Портфолио лучших моментов</p>
+              </div>
+
+              <div class="portfolio-filters">
+                <button class="filter-btn active" data-filter="all">Все</button>
+                <button class="filter-btn" data-filter="love">Love Story</button>
+                <button class="filter-btn" data-filter="family">Семья</button>
+                <button class="filter-btn" data-filter="event">События</button>
+                <button class="filter-btn" data-filter="portrait">Портрет</button>
+              </div>
+
+              <div class="portfolio-grid">
+                <% (photos || []).forEach((p)=> { %>
+                  <div class="portfolio-item" data-category="<%= p.category %>">
+                    <div class="portfolio-image">
+                      <img src="<%= p.imagePath %>" alt="<%= p.title %>">
+                      <div class="portfolio-overlay">
+                        <div class="portfolio-info">
+                          <h3>
+                            <%= p.title %>
+                          </h3>
+                          <p>
+                            <%= p.subtitle || '' %>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <% }) %>
+              </div>
+
+              <div class="portfolio-loadmore">
+                <button class="loadmore-btn" data-loaded="<%= photosLoaded || 0 %>"
+                  data-total="<%= photosTotal || 0 %>">
+                  <i class="fas fa-images"></i>
+                  Загрузить еще
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <%- include('../partials/footer') %>
+
+            <%- include('../partials/chatbot') %>
+              <script src="/js/script.js"></script>
+  </body>
+
+  </html>

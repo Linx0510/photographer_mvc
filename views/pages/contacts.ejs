@@ -1,0 +1,92 @@
+<%- include('../partials/head', { title: 'Контакты - AMIRXWMI' }) %>
+
+  <body>
+    <%- include('../partials/header') %>
+
+      <% if (flash) { %>
+        <div style="max-width:1100px;margin:20px auto 0;padding:12px 16px;border-radius:12px;"
+          class="flash <%= flash.type %>">
+          <%= flash.message %>
+        </div>
+        <% } %>
+
+          <section class="contacts-hero">
+            <div class="container">
+              <h1>Связаться со мной</h1>
+              <p>Напишите или позвоните - отвечу в течение часа</p>
+            </div>
+          </section>
+
+          <section class="contacts-info">
+            <div class="container">
+              <div class="contacts-grid">
+                <div class="contact-item">
+                  <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                  <div>
+                    <h3>Телефон</h3>
+                    <a href="tel:+79991234567">+7 (999) 123-45-67</a>
+                  </div>
+                </div>
+
+                <div class="contact-item">
+                  <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                  <div>
+                    <h3>Email</h3>
+                    <a href="mailto:hello@amirxwmi.ru">hello@amirxwmi.ru</a>
+                  </div>
+                </div>
+
+                <div class="contact-item">
+                  <div class="contact-icon"><i class="fab fa-telegram"></i></div>
+                  <div>
+                    <h3>Telegram</h3>
+                    <a href="https://t.me/amirxwmi">@amirxwmi</a>
+                  </div>
+                </div>
+
+                <div class="contact-item">
+                  <div class="contact-icon"><i class="fab fa-instagram"></i></div>
+                  <div>
+                    <h3>Instagram</h3>
+                    <a href="https://instagram.com/amirxwmi">@amirxwmi</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="contact-form-section">
+            <div class="container">
+              <h2>Написать сообщение</h2>
+              <form class="simple-form" action="/contacts" method="POST">
+                <input type="text" name="name" placeholder="Ваше имя" required>
+                <input type="tel" name="phone" placeholder="Телефон / Telegram" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <textarea name="text" placeholder="Сообщение" rows="5" required></textarea>
+                <button type="submit" class="send-btn">Отправить</button>
+              </form>
+            </div>
+          </section>
+
+          <section class="contact-location">
+            <div class="container">
+              <h2>Где снимаю</h2>
+              <div class="location-info">
+                <div>
+                  <i class="fas fa-map-marker-alt"></i>
+                  <p>Оренбург и Оренбургская область<br>Выезд по России</p>
+                </div>
+                <div class="work-times">
+                  <h3>Время работы</h3>
+                  <p>Ежедневно • 9:00 - 21:00</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <%- include('../partials/footer') %>
+            <%- include('../partials/chatbot') %>
+              <script src="/js/script.js"></script>
+  </body>
+
+  </html>

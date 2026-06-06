@@ -1,0 +1,243 @@
+<%- include('../partials/head', { title: 'Подарочные сертификаты - AMIRXWMI' }) %>
+
+  <body>
+    <%- include('../partials/header') %>
+
+      <% if (flash) { %>
+        <div style="max-width:1100px;margin:20px auto 0;padding:12px 16px;border-radius:12px;"
+          class="flash <%= flash.type %>">
+          <%= flash.message %>
+        </div>
+        <% } %>
+
+          <section class="cert-simple-hero">
+            <div class="container">
+              <h1>Подарочные сертификаты</h1>
+              <p>Выберите сертификат и оплатите за 10 секунд</p>
+            </div>
+          </section>
+
+          <section class="cert-cards-section">
+            <div class="container">
+              <div class="cert-cards">
+                <% (certsView || []).forEach((c)=> { %>
+                  <div class="cert-card <%= c.isPopular ? 'popular' : '' %>">
+                    <% if (c.isPopular) { %>
+                      <div class="popular-label">ПОПУЛЯРНЫЙ</div>
+                      <% } %>
+                        <h3>
+                          <%= c.title %>
+                        </h3>
+                        <div class="price-big">
+                          <%= Number(c.price).toLocaleString('ru-RU') %> ₽
+                        </div>
+                        <ul>
+                          <% (c.perksList || []).forEach((p)=> { %>
+                            <li>
+                              <%= p %>
+                            </li>
+                            <% }) %>
+                        </ul>
+                        <button type="button" class="pay-btn" data-certificate-id="<%= c.id %>">Оплатить</button>
+                  </div>
+                  <% }) %>
+              </div>
+            </div>
+          </section>
+
+          <section class="faq-simple">
+            <div class="container">
+              <h2>Вопросы?</h2>
+              <div class="faq-list">
+                <div class="faq-item">
+                  <div class="faq-q">Срок действия?</div>
+                  <div class="faq-a">12 месяцев</div>
+                </div>
+                <div class="faq-item">
+                  <div class="faq-q">Для кого?</div>
+                  <div class="faq-a">1-2 человека</div>
+                </div>
+                <div class="faq-item">
+                  <div class="faq-q">Формат?</div>
+                  <div class="faq-a">PDF на email</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <%- include('../partials/footer') %>
+
+            <div id="bookingModal" class="booking-modal" onclick="if (event.target === this) closeBooking()">
+              <div class="booking-content">
+                <button class="booking-close" type="button" onclick="closeBooking()">&times;</button>
+                <div id="bookingInner"></div>
+              </div>
+            </div>
+
+            <div id="certificatesPageData" data-is-auth="<%= isAuth ? 'true' : 'false' %>"
+              data-user-name="<%= userNameJson %>" data-certs="<%= certsJson %>"></div>
+
+            <script>
+              const pageData = document.getElementById('certificatesPageData');
+              const IS_AUTH = pageData.dataset.isAuth === 'true';
+              const USER_NAME = decodeURIComponent(pageData.dataset.userName || '');
+              const CERTS = JSON.parse(decodeURIComponent(pageData.dataset.certs || '[]'));
+
+              document.querySelectorAll('.pay-btn[data-certificate-id]').forEach((button) => {
+                button.addEventListener('click', () => {
+                  payCard(button.dataset.certificateId);
+                });
+              });
+
+              function minDate() {
+                const d = new Date();
+                d.setDate(d.getDate() + 1);
+                return d.toISOString().split('T')[0];
+              }
+
+              function payCard(certificateId) {
+                if (!IS_AUTH) {
+                  window.location.href = '/auth';
+                  return;
+                }
+
+                const cert = CERTS.find((c) => Number(c.id) === Number(certificateId));
+                if (!cert) return;
+
+                document.getElementById('bookingInner').innerHTML = `
+            <div class="booking-header">
+              <div class="booking-icon"><i class="fas fa-gift"></i></div>
+              <h2>Оформить сертификат</h2>
+              <p class="booking-cert-name">${cert.title} &nbsp;·&nbsp; ${Number(cert.price).toLocaleString('ru-RU')} ₽</p>
+            </div>
+            <form id="bookingForm" class="booking-form" data-no-validate>
+              <div class="booking-field">
+                <label><i class="fas fa-user"></i> Ваше имя</label>
+                <input type="text" name="clientName" value="${USER_NAME}" placeholder="Иван Иванов" required maxlength="100">
+              </div>
+              <div class="booking-field">
+                <label><i class="fas fa-phone"></i> Телефон</label>
+                <input type="tel" name="phone" placeholder="+7 (999) 000-00-00" required maxlength="20">
+              </div>
+              <div class="booking-row">
+                <div class="booking-field">
+                  <label><i class="fas fa-calendar-alt"></i> Дата съёмки</label>
+                  <input type="date" name="bookingDate" min="${minDate()}" required>
+                </div>
+                <div class="booking-field">
+                  <label><i class="fas fa-clock"></i> Время</label>
+                  <select name="bookingTime" required>
+                    <option value="">Выберите время</option>
+                    <option value="09:00">09:00</option>
+                    <option value="10:00">10:00</option>
+                    <option value="11:00">11:00</option>
+                    <option value="12:00">12:00</option>
+                    <option value="13:00">13:00</option>
+                    <option value="14:00">14:00</option>
+                    <option value="15:00">15:00</option>
+                    <option value="16:00">16:00</option>
+                    <option value="17:00">17:00</option>
+                    <option value="18:00">18:00</option>
+                    <option value="19:00">19:00</option>
+                    <option value="20:00">20:00</option>
+                  </select>
+                </div>
+              </div>
+              <button type="submit" class="booking-submit-btn">
+                <i class="fas fa-check-circle"></i> Оформить
+              </button>
+            </form>
+          `;
+
+                document.getElementById('bookingModal').classList.add('active');
+                document.body.style.overflow = 'hidden';
+
+                document.getElementById('bookingForm').onsubmit = async function (e) {
+                  e.preventDefault();
+
+                  const btn = this.querySelector('.booking-submit-btn');
+                  btn.disabled = true;
+                  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
+
+                  const fd = new FormData(this);
+
+                  try {
+                    const r = await fetch('/certificates/purchase', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        certificateId,
+                        clientName: fd.get('clientName'),
+                        phone: fd.get('phone'),
+                        bookingDate: fd.get('bookingDate'),
+                        bookingTime: fd.get('bookingTime')
+                      })
+                    });
+
+                    const data = await r.json().catch(() => ({}));
+
+                    if (r.status === 401 && data.redirect) {
+                      window.location.href = data.redirect;
+                      return;
+                    }
+
+                    if (!r.ok || !data.ok) {
+                      btn.disabled = false;
+                      btn.innerHTML = '<i class="fas fa-check-circle"></i> Записаться';
+                      showBookingError(data.message || 'Ошибка. Попробуйте ещё раз.');
+                      return;
+                    }
+
+                    showBookingSuccess(fd.get('bookingDate'), fd.get('bookingTime'), cert.title);
+                  } catch (error) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-check-circle"></i> Записаться';
+                    showBookingError('Ошибка сети. Проверьте соединение.');
+                  }
+                };
+              }
+
+              function showBookingSuccess(date, time, certTitle) {
+                const d = new Date(date);
+                const formatted = d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+
+                document.getElementById('bookingInner').innerHTML = `
+            <div class="booking-success">
+              <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+              <h2>Сертификат оформлен!</h2>
+              <p class="success-cert">${certTitle}</p>
+              <div class="success-details">
+                <div class="success-detail"><i class="fas fa-calendar-alt"></i> ${formatted}</div>
+                <div class="success-detail"><i class="fas fa-clock"></i> ${time}</div>
+              </div>
+              <p class="success-hint">Детали сохранены в личном кабинете.<br>Фотограф свяжется с вами для подтверждения.</p>
+              <button type="button" class="booking-submit-btn" onclick="closeBooking()">Закрыть</button>
+            </div>
+          `;
+              }
+
+              function showBookingError(msg) {
+                const existing = document.getElementById('bookingError');
+                if (existing) existing.remove();
+
+                const form = document.getElementById('bookingForm');
+                if (!form) return;
+
+                const el = document.createElement('p');
+                el.id = 'bookingError';
+                el.className = 'booking-error';
+                el.textContent = msg;
+                form.prepend(el);
+              }
+
+              function closeBooking() {
+                document.getElementById('bookingModal').classList.remove('active');
+                document.body.style.overflow = '';
+              }
+            </script>
+
+            <%- include('../partials/chatbot') %>
+              <script src="/js/script.js"></script>
+  </body>
+
+  </html>

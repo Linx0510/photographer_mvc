@@ -7,7 +7,7 @@
         </a>
       </div>
 
-      <ul class="nav-menu">
+      <ul class="nav-menu" id="main-navigation">
         <li><a href="/contacts" class="nav-link <%= path === '/contacts' ? 'active' : '' %>">Контакты</a></li>
         <li><a href="/certificates" class="nav-link <%= path === '/certificates' ? 'active' : '' %>">Сертификаты</a>
         </li>
@@ -32,9 +32,9 @@
                 <% } %>
       </ul>
 
-      <div class="hamburger">
+      <button class="hamburger" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="main-navigation">
         <span></span><span></span><span></span>
-      </div>
+      </button>
     </div>
   </nav>
 </header>

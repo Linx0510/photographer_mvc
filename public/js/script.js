@@ -1,20 +1,28 @@
 
 (function () {
-  const hamburger = document.querySelector('.hamburger');
-  const navMenu = document.querySelector('.nav-menu');
-  if (hamburger && navMenu) {
+  const initMobileMenu = () => {
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('.nav-menu');
+
+    if (!hamburger || !navMenu) return;
+
+    const setMenuOpen = (isOpen) => {
+      navMenu.classList.toggle('active', isOpen);
+      hamburger.classList.toggle('active', isOpen);
+      hamburger.setAttribute('aria-expanded', String(isOpen));
+      hamburger.setAttribute('aria-label', isOpen ? 'Закрыть меню' : 'Открыть меню');
+    };
+
     hamburger.addEventListener('click', () => {
-      navMenu.classList.toggle('active');
-      hamburger.classList.toggle('active');
+      setMenuOpen(!navMenu.classList.contains('active'));
     });
 
-    navMenu.querySelectorAll('a').forEach((a) => {
-      a.addEventListener('click', () => {
-        navMenu.classList.remove('active');
-        hamburger.classList.remove('active');
-      });
+    navMenu.querySelectorAll('a, button').forEach((item) => {
+      item.addEventListener('click', () => setMenuOpen(false));
     });
-  }
+  };
+
+  initMobileMenu();
 
   const counters = Array.from(document.querySelectorAll('.stat-number[data-target]'));
   if (counters.length) {

@@ -150,6 +150,9 @@ a {
     flex-direction: column;
     cursor: pointer;
     gap: 4px;
+    background: transparent;
+    border: 0;
+    padding: 8px;
 }
 
 .hamburger span {
@@ -2105,12 +2108,20 @@ select:focus {
 }
 
 @media (max-width: 768px) {
-    .nav-menu {
-        display: none;
-    }
-
     .hamburger {
         display: flex;
+    }
+
+    .hamburger.active span:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+
+    .hamburger.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
     }
 
     .logo h2 {
